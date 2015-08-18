@@ -11,6 +11,9 @@
 (provide 'phantomjs)
 (require 'websocket)
 
+(defconst phantomjs-mode-base (file-name-directory load-file-name))
+(defcustom phantomjs-binary "phantomjs" "The phantomjs binary to invoke")
+
 (defvar phantomjs-server nil)
 (defvar phantomjs-outgoing-messages nil)
 (defvar phantomjs-awaiting-response nil)
@@ -46,7 +49,7 @@
 				       (phantomjs-dispatch)))) ;No authentification at the moment
     (setenv "PHANTOMJS_COMM_PORT" (format "%d" (process-contact phantomjs-server :service)))
     
-    (make-comint-in-buffer "PHANTOMJS" nil "/home/evgeny/build/phantomjs-2.0.0/bin/phantomjs" nil "/home/evgeny/build/phantomjsmode/phantom-repl.js")
+    (make-comint-in-buffer "PHANTOMJS" nil phantomjs-binary nil (expand-file-name "phantom-repl.js" phantomjs-mode-base))
     ))
 
 (defun phantomjs-dispatch ()
